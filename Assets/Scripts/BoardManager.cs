@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -45,6 +44,7 @@ public class BoardManager : MonoBehaviour
 
     void BoardSetup()
     {
+        boardHolder = new GameObject("boardHolder").transform;
         for (int x = 0; x < cols; x++)
         {
             for(int y = 0; y < rows; y++)
