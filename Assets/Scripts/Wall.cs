@@ -9,6 +9,9 @@ public class Wall : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
 
+    public AudioClip chopSound1;
+    public AudioClip chopSound2;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -19,6 +22,7 @@ public class Wall : MonoBehaviour
     {
         spriteRenderer.sprite = dmgSprite;
         hp-=loss;
+        SoundManager.instance.RandomizeSfx(chopSound1, chopSound2);
 
         if (hp <= 0)
         {
