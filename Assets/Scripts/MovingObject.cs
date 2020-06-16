@@ -43,9 +43,11 @@ public abstract class MovingObject : MonoBehaviour
         Vector2 start = transform.position;
         Vector2 end = start + new Vector2(xDir, yDir);
 
+        //Disable bc2d to avoid linecase hit moving object self.
         bc2d.enabled = false;
         hit = Physics2D.Linecast(start, end, blockingLayer);
         bc2d.enabled = true;
+
         // if player doesnt collide board, it move to end, and return true;
         if (hit.transform == null)
         {

@@ -35,6 +35,7 @@ public class BoardManager : MonoBehaviour
 
     void InitGridPos()
     {
+        gridPos.Clear();
         for (int x = 2; x < rows - 2; x++)
         {
             for (int y = 2; y < cols - 2; y++)
