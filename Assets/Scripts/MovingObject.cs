@@ -4,9 +4,10 @@ using UnityEngine;
 
 public abstract class MovingObject : MonoBehaviour
 {
-    public float moveTime = 0.03f;
+    public float moveTime = 0.06f;
     public LayerMask blockingLayer;
 
+    private bool isMoving = false;
     private BoxCollider2D bc2d;
     private Rigidbody2D rb2d;
     private float inverseMoveTime;
@@ -31,7 +32,7 @@ public abstract class MovingObject : MonoBehaviour
         bc2d.enabled = true;
 
         // if player doesnt collide board, it move to end, and return true;
-        if (hit.transform == null)
+        if (hit.transform == null && !isMoving)
         {
             StartCoroutine(SmoothMovement(end));
             return true;
@@ -40,7 +41,8 @@ public abstract class MovingObject : MonoBehaviour
     }
 
     protected IEnumerator SmoothMovement(Vector3 end)
-    {   
+    {
+        isMoving = true;
         // The sqrt of distance between current postion and destionation
         float sqrtRemainingDistance = (transform.position - end).sqrMagnitude;
 
@@ -54,6 +56,8 @@ public abstract class MovingObject : MonoBehaviour
             sqrtRemainingDistance = (transform.position - end).sqrMagnitude;
             yield return null;
         }
+        rb2d.MovePosition(end);
+        isMoving = false;
     }
 
 
