@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class MovingObject : MonoBehaviour
 {
-    public float moveTime = 0.1f;
+    public float moveTime = 0.03f;
     public LayerMask blockingLayer;
 
     private BoxCollider2D bc2d;
@@ -19,24 +19,6 @@ public abstract class MovingObject : MonoBehaviour
         rb2d = GetComponent<Rigidbody2D>();
         inverseMoveTime = 1f / moveTime;
     }
-
-    protected IEnumerator SmoothMovement(Vector3 end)
-    {   
-        // The sqrt of distance between current postion and destionation
-        float sqrtRemainingDistance = (transform.position - end).sqrMagnitude;
-
-        // rb2d move inverseMoveTime * Time.deltaTime every frame, so we use a while loop to control our player
-        // can move to destionation 
-        while (sqrtRemainingDistance > float.Epsilon)
-        {
-            // move straight a rb2d to postion end.
-            Vector3 newPos = Vector3.MoveTowards(rb2d.position, end, inverseMoveTime * Time.deltaTime);
-            rb2d.MovePosition(newPos);
-            sqrtRemainingDistance = (transform.position - end).sqrMagnitude;
-            yield return null;
-        }
-    }
-
     protected bool Move(int xDir, int yDir, out RaycastHit2D hit)
     {
         // current postion
@@ -57,6 +39,24 @@ public abstract class MovingObject : MonoBehaviour
         return false;
     }
 
+    protected IEnumerator SmoothMovement(Vector3 end)
+    {   
+        // The sqrt of distance between current postion and destionation
+        float sqrtRemainingDistance = (transform.position - end).sqrMagnitude;
+
+        // rb2d move inverseMoveTime * Time.deltaTime every frame, so we use a while loop to control our player
+        // can move to destionation 
+        while (sqrtRemainingDistance > float.Epsilon)
+        {
+            // move straight a rb2d to postion end.
+            Vector3 newPos = Vector3.MoveTowards(rb2d.position, end, inverseMoveTime * Time.deltaTime);
+            rb2d.MovePosition(newPos);
+            sqrtRemainingDistance = (transform.position - end).sqrMagnitude;
+            yield return null;
+        }
+    }
+
+
     // Move out component and do somethings if this component get a hit or not 
     protected virtual void AttemptMove<T>(int xDir, int yDir) where T : Component
     {
@@ -73,9 +73,4 @@ public abstract class MovingObject : MonoBehaviour
 
     protected abstract void OnCantMove<T>(T component) where T : Component;
 
-    // Update is called once per frame
-    protected virtual void Update()
-    {
-        
-    }
 }
